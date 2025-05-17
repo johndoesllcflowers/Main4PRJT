@@ -395,6 +395,10 @@
           <p class="text-center text-xs text-blue-200 mt-2">
             Free, no-obligation quote. Your information is secure.
           </p>
+          <!-- Response message container -->
+          <div id="responseMessage" class="mt-4 text-center hidden">
+            <p class="text-sm font-medium bg-green-500/20 text-green-100 p-2 rounded"></p>
+          </div>
         </div>
       </div>
     </section>
@@ -1026,6 +1030,16 @@
       <p>&copy; 2024 Wayzere. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- Hidden Google Form for data submission -->
+  <form id="hiddenVehicleForm" style="display: none;">
+    <input type="text" name="vehicleMake" id="hidden-make">
+    <input type="text" name="vehicleModel" id="hidden-model">
+    <input type="text" name="vehicleMileage" id="hidden-mileage">
+    <input type="text" name="name" id="hidden-name">
+    <input type="tel" name="phone" id="hidden-phone">
+    <input type="email" name="email" id="hidden-email">
+  </form>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -1708,7 +1722,18 @@ const autoMakers = [
         cn = document.getElementById("customer-name"),
         cp = document.getElementById("customer-phone"),
         ce = document.getElementById("customer-email"),
-        qb = document.getElementById("quote-button");
+        qb = document.getElementById("quote-button"),
+        responseMsg = document.getElementById("responseMessage"),
+        hiddenForm = document.getElementById("hiddenVehicleForm"),
+        hiddenMake = document.getElementById("hidden-make"),
+        hiddenModel = document.getElementById("hidden-model"),
+        hiddenMileage = document.getElementById("hidden-mileage"),
+        hiddenName = document.getElementById("hidden-name"),
+        hiddenPhone = document.getElementById("hidden-phone"),
+        hiddenEmail = document.getElementById("hidden-email");
+
+      // Define the URL for the Google Web App
+      const GOOGLE_WEB_APP_URL = "YOUR_WEB_APP_URL"; // Replace with your actual Google Web App URL
 
       // Populate makes
       autoMakers.forEach((m) => {
@@ -1791,41 +1816,75 @@ const autoMakers = [
           : "w-full px-6 py-3 rounded-lg font-semibold bg-white/30 text-white/70 cursor-not-allowed";
       }
 
+      // Handle form submission
       qb.addEventListener("click", () => {
         if (qb.disabled) return;
         
-        const query = new URLSearchParams({
-          make: selMaker.id,
-          model: selModel.id,
-          mileage: selMileage ? selMileage.id : '',
-          name: custName,
-          phone: custPhone,
-          email: custEmail || ''
-        }).toString();
+        // Populate hidden form values
+        hiddenMake.value = selMaker.name;
+        hiddenModel.value = selModel.name;
+        hiddenMileage.value = selMileage ? selMileage.name : '';
+        hiddenName.value = custName;
+        hiddenPhone.value = custPhone;
+        hiddenEmail.value = custEmail || '';
+        
+        // Submit form data to Google Web App
+        const formData = new FormData(hiddenForm);
+        const params = new URLSearchParams(formData);
+        
+        fetch(GOOGLE_WEB_APP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: params
+        }).then(() => {
+          // Show success message
+          responseMsg.classList.remove("hidden");
+          responseMsg.querySelector("p").textContent = "Thank you! Your warranty quote request has been submitted.";
+          responseMsg.querySelector("p").className = "text-sm font-medium bg-green-500/20 text-green-100 p-2 rounded";
+          
+          // Also continue with the original redirect logic
+          const query = new URLSearchParams({
+            make: selMaker.id,
+            model: selModel.id,
+            mileage: selMileage ? selMileage.id : '',
+            name: custName,
+            phone: custPhone,
+            email: custEmail || ''
+          }).toString();
 
-        // Define car categories
-        const normalCars = ['ford', 'chevrolet', 'gmc', 'cadillac', 'buick', 'chrysler', 'dodge', 'jeep', 'ram', 
-          'lincoln', 'tesla', 'rivian', 'lucid', 'fisker', 'volkswagen', 'smart', 'fiat', 'alfa_romeo', 'toyota', 
-          'lexus', 'honda', 'acura', 'nissan', 'infiniti', 'mazda', 'subaru', 'mitsubishi', 'suzuki', 'isuzu', 
-          'hyundai', 'kia', 'genesis', 'mini', 'volvo', 'polestar'];
+          // Define car categories
+          const normalCars = ['ford', 'chevrolet', 'gmc', 'cadillac', 'buick', 'chrysler', 'dodge', 'jeep', 'ram', 
+            'lincoln', 'tesla', 'rivian', 'lucid', 'fisker', 'volkswagen', 'smart', 'fiat', 'alfa_romeo', 'toyota', 
+            'lexus', 'honda', 'acura', 'nissan', 'infiniti', 'mazda', 'subaru', 'mitsubishi', 'suzuki', 'isuzu', 
+            'hyundai', 'kia', 'genesis', 'mini', 'volvo', 'polestar'];
 
-        const luxuryCars = ['bmw', 'mercedes_benz', 'audi', 'porsche', 'jaguar', 'land_rover'];
+          const luxuryCars = ['bmw', 'mercedes_benz', 'audi', 'porsche', 'jaguar', 'land_rover'];
 
-        const exoticCars = ['rolls_royce', 'bentley', 'aston_martin', 'mclaren', 'ferrari', 'lamborghini'];
+          const exoticCars = ['rolls_royce', 'bentley', 'aston_martin', 'mclaren', 'ferrari', 'lamborghini'];
 
-        // Determine category and set redirect URL
-        let redirectUrl;
-        if (normalCars.includes(selMaker.id)) {
-          redirectUrl = `https://www.wayzere.com/Basicpackage.html`;
-        } else if (luxuryCars.includes(selMaker.id)) {
-          redirectUrl = `https://www.wayzere.com/Luxurypackage.html`;
-        } else if (exoticCars.includes(selMaker.id)) {
-          redirectUrl = `https://www.wayzere.com/Exoticpackage.html`;
-        } else {
-          redirectUrl = `https://default.wayzere.com/?${query}`;
-        }
+          // Determine category and set redirect URL
+          let redirectUrl;
+          if (normalCars.includes(selMaker.id)) {
+            redirectUrl = `https://www.wayzere.com/Basicpackage.html`;
+          } else if (luxuryCars.includes(selMaker.id)) {
+            redirectUrl = `https://www.wayzere.com/Luxurypackage.html`;
+          } else if (exoticCars.includes(selMaker.id)) {
+            redirectUrl = `https://www.wayzere.com/Exoticpackage.html`;
+          } else {
+            redirectUrl = `https://default.wayzere.com/?${query}`;
+          }
 
-        window.location.href = redirectUrl;
+          // Short delay before redirect to show the success message
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 1500);
+        }).catch((error) => {
+          // Show error message
+          responseMsg.classList.remove("hidden");
+          responseMsg.querySelector("p").textContent = "There was an error submitting your request. Please try again.";
+          responseMsg.querySelector("p").className = "text-sm font-medium bg-red-500/20 text-red-100 p-2 rounded";
+          console.error("Error!", error.message);
+        });
       });
 
       // Toggle dropdowns
@@ -1856,6 +1915,36 @@ const autoMakers = [
         oc.classList.remove("show");
         mileageC.classList.remove("show");
       });
+
+      // Plan selection buttons
+      document.getElementById("btn-basic").addEventListener("click", function() {
+        scrollToForm("Essential Coverage");
+      });
+      
+      document.getElementById("btn-advantage").addEventListener("click", function() {
+        scrollToForm("Advantage Coverage");
+      });
+      
+      document.getElementById("btn-ultimate").addEventListener("click", function() {
+        scrollToForm("Ultimate Coverage");
+      });
+      
+      // Helper function to scroll back to form
+      function scrollToForm(planType) {
+        // Scroll to the form
+        document.querySelector(".hero-section").scrollIntoView({ behavior: "smooth" });
+        
+        // Show a toast message about the selected plan
+        const toast = document.createElement("div");
+        toast.className = "fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade";
+        toast.textContent = `${planType} selected! Fill in your details to continue.`;
+        document.body.appendChild(toast);
+        
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
 
       // Testimonial carousel functionality
       const testimonials = document.querySelectorAll('.testimonial-slide');
