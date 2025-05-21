@@ -388,9 +388,9 @@
 
   <script>
     // URLs for redirects
-    const BASIC_URL = "https://buy.stripe.com/eVa7tb45Uap4ftudQR";
-    const ADVANTAGE_URL = "https://buy.stripe.com/9AQ6p7eKy7cSepq4gg";
-    const ULTIMATE_URL = "https://buy.stripe.com/6oEaFn0TI54K0yAaEG";
+    const BASIC_URL = "https://buy.stripe.com/9B68wPgiQf1W82Eg3YeUU04";
+    const ADVANTAGE_URL = "https://buy.stripe.com/dRm00j6Ig3je6YAbNIeUU05";
+    const ULTIMATE_URL = "https://buy.stripe.com/cNi28r2s06vqdmY7xseUU06";
 
     // Plan selection handling
     const basicBtn = document.getElementById("btn-basic");
@@ -431,17 +431,17 @@
     }
 
     basicBtn.addEventListener("click", (e) => {
-      selectPlan(e.target, 'Essential Coverage', 980);
+      selectPlan(e.target, 'Essential Coverage', 390);
       setTimeout(() => window.location.href = BASIC_URL, 500);
     });
 
     advantageBtn.addEventListener("click", (e) => {
-      selectPlan(e.target, 'Advantage Coverage', 1480);
+      selectPlan(e.target, 'Advantage Coverage', 690);
       setTimeout(() => window.location.href = ADVANTAGE_URL, 500);
     });
 
     ultimateBtn.addEventListener("click", (e) => {
-      selectPlan(e.target, 'Ultimate Coverage', 1980);
+      selectPlan(e.target, 'Ultimate Coverage', 1090);
       setTimeout(() => window.location.href = ULTIMATE_URL, 500);
     });
 
