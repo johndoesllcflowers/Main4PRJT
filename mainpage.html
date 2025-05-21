@@ -1947,32 +1947,26 @@ const autoMakers = [
 
       // Plan selection buttons
       document.getElementById("btn-basic").addEventListener("click", function() {
-        scrollToForm("Essential Coverage");
+        scrollToTopAndShowAlert();
       });
       
       document.getElementById("btn-advantage").addEventListener("click", function() {
-        scrollToForm("Advantage Coverage");
+        scrollToTopAndShowAlert();
       });
       
       document.getElementById("btn-ultimate").addEventListener("click", function() {
-        scrollToForm("Ultimate Coverage");
+        scrollToTopAndShowAlert();
       });
       
-      // Helper function to scroll back to form
-      function scrollToForm(planType) {
-        // Scroll to the form
-        document.querySelector(".hero-section").scrollIntoView({ behavior: "smooth" });
+      // Function to scroll to top and show alert
+      function scrollToTopAndShowAlert() {
+        // Scroll to the quote form section
+        document.getElementById("quote-form-section").scrollIntoView({ behavior: "smooth" });
         
-        // Show a toast message about the selected plan
-        const toast = document.createElement("div");
-        toast.className = "fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade";
-        toast.textContent = `${planType} selected! Fill in your details to continue.`;
-        document.body.appendChild(toast);
-        
-        // Remove toast after 3 seconds
+        // After scrolling, show the alert
         setTimeout(() => {
-          toast.remove();
-        }, 3000);
+          alert("Please fill out the information in the form above.");
+        }, 600);
       }
 
       // Testimonial carousel functionality
@@ -2104,26 +2098,6 @@ const autoMakers = [
       });
     }
   });
- <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      ["btn-basic","btn-advantage","btn-ultimate"].forEach(id => {
-        const btn = document.getElementById(id);
-        if (!btn) {
-          console.warn(`Button "${id}" not found`);
-          return;
-        }
-        btn.addEventListener("click", () => {
-          // 1) scroll up to the form
-          document
-            .getElementById("quote-form-section")
-            .scrollIntoView({ behavior: "smooth" });
-          // 2) remind user to fill it out
-          setTimeout(() => {
-            alert("Please fill out the information in the form above.");
-          }, 600);
-        });
-      });
-    });
-  </script>
+</script>
 </body>
 </html>
