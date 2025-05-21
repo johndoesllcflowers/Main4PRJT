@@ -2092,5 +2092,18 @@ const autoMakers = [
       });
     });
   </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var quoteBtn = document.getElementById('quote-button');
+    if (quoteBtn) {
+      quoteBtn.addEventListener('click', function() {
+        if (typeof fbq === "function") {
+          fbq('track', 'Lead');
+          fbq('track', 'CompleteRegistration');
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
