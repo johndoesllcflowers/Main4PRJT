@@ -22,12 +22,6 @@
     fbq('init', '1198572618104777');
     fbq('track', 'PageView');
   </script>
-  <noscript>
-    <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1198572618104777&ev=PageView&noscript=1"
-    />
-  </noscript>
-  <!-- End Meta Pixel Code -->
   <script>
     tailwind.config = {
       theme: {
@@ -374,6 +368,13 @@
       </div>
     </section>
   </div>
+
+  <!-- Meta Pixel noscript tag moved to body -->
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1198572618104777&ev=PageView&noscript=1"
+    />
+  </noscript>
 
   <script>
     // URLs for redirects
