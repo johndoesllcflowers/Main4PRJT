@@ -9,32 +9,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Facebook Pixel Code (Paste your Pixel ID below) -->
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ["Inter", "sans-serif"] },
-          colors: {
-            blue: {
-              50:"#F0F7FF",100:"#E0EFFF",200:"#BBD9FF",300:"#8ABBFF",
-              400:"#5A9CFF",500:"#3B82F6",600:"#2563EB",
-              700:"#1D4ED8",800:"#1E40AF",900:"#1E3A8A"
-            },
-            silver: {
-              50:"#F9FAFB",100:"#F3F4F6",200:"#E5E7EB",300:"#D1D5DB",
-              400:"#9CA3AF",500:"#6B7280",600:"#4B5563",
-              700:"#374151",800:"#1F2937",900:"#111827"
-            },
-            gold: {
-              50:"#FFFBEB",100:"#FEF3C7",200:"#FDE68A",300:"#FCD34D",
-              400:"#FBBF24",500:"#F59E0B",600:"#D97706",
-              700:"#B45309",800:"#92400E",900:"#78350F"
-            }
-          }
-        }
-      }
-    };
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'YOUR_PIXEL_ID'); // <--- REPLACE with your Pixel ID!
+    fbq('track', 'PageView');
   </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+
   <style>
     @keyframes pulse-border {
       0% { border-color: rgba(37, 99, 235, 0.5); }
@@ -312,7 +305,7 @@
         </div>
         <div class="bg-white p-6 rounded-xl shadow-md">
           <h3 class="font-semibold mb-3 text-lg">Cosmetic Damage</h3>
-          <p class="text-gray-600">Paint, body damage, interior wear and tear</p>
+          <p class="text-gray-600">Paint, body damage, interior wear and tear           <p class="text-gray-600">Paint, body damage, interior wear and tear</p>
         </div>
         <div class="bg-white p-6 rounded-xl shadow-md">
           <h3 class="font-semibold mb-3 text-lg">Modified Components</h3>
@@ -374,11 +367,9 @@
     function selectPlan(selectedPlan) {
       plans.forEach(plan => plan.classList.remove('selected'));
       selectedPlan.closest('.plan-card').classList.add('selected');
-      
       // Update cart count
       count = 1;
       cartCount.textContent = count;
-      
       // Animate cart
       cartContainer.style.transform = 'scale(1.1)';
       setTimeout(() => {
@@ -386,17 +377,27 @@
       }, 200);
     }
 
+    // --- FIRE FACEBOOK PIXEL ON BUTTON CLICK ---
+    function fireInitiateCheckout() {
+      if (typeof fbq !== "undefined") {
+        fbq('track', 'InitiateCheckout');
+      }
+    }
+
     basicBtn.addEventListener("click", (e) => {
+      fireInitiateCheckout();
       selectPlan(e.target);
       setTimeout(() => window.location.href = BASIC_URL, 500);
     });
 
     advantageBtn.addEventListener("click", (e) => {
+      fireInitiateCheckout();
       selectPlan(e.target);
       setTimeout(() => window.location.href = ADVANTAGE_URL, 500);
     });
 
     ultimateBtn.addEventListener("click", (e) => {
+      fireInitiateCheckout();
       selectPlan(e.target);
       setTimeout(() => window.location.href = ULTIMATE_URL, 500);
     });
@@ -430,7 +431,6 @@
       button.addEventListener('click', () => {
         const content = button.nextElementSibling;
         const icon = button.querySelector('span:last-child');
-        
         content.classList.toggle('hidden');
         icon.textContent = content.classList.contains('hidden') ? '+' : '-';
         icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(45deg)';
