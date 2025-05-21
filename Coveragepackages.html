@@ -5,6 +5,30 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Wayzere Coverage Plans</title>
 
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1198572618104777');
+    fbq('track', 'PageView');
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D26GEV27FT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-D26GEV27FT');
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -123,20 +147,26 @@
 </head>
 
 <body class="bg-gray-50 min-h-screen">
+  <!-- Meta Pixel noscript -->
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1198572618104777&ev=PageView&noscript=1"
+    />
+  </noscript>
+
   <!-- Navigation Bar -->
   <nav class="bg-white shadow-sm fixed w-full z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 nav-container">
         <div class="flex items-center">
           <img id="company-logo"
-     src="images/Wayzere.png"
-     alt="Wayzere Logo"
-     class="h-32 w-auto mr-3">
+            src="images/Wayzere.png"
+            alt="Wayzere Logo"
+            class="h-32 w-auto mr-3">
         </div>
         <div class="flex items-center">
           <a href="tel:1234567890" class="text-gray-600 hover:text-blue-600 hidden sm:flex items-center">
             <span class="mr-2"></span>
-            
           </a>
         </div>
       </div>
@@ -268,12 +298,12 @@
             <li class="feature-reveal flex items-center text-gray-600"><span class="check-gold">✓</span>Emissions: Sensors, catalytic converter</li>
             <li class="feature-reveal flex items-center text-gray-600"><span class="check-gold">✓</span>Luxury Rental Car: Up to 90 days</li>
             <li class="feature-reveal flex items-center text-gray-600"><span class="check-gold">✓</span>Enhanced Rideshare: Up to 90 days</li>
-            <li class="feature-reveal flex items-center text-gray-600"><span class="check-gold">✓</span>Trip Interruption: Up to $3000/day</li>
+            <li class="feature-reveal flex items-center text-gray-600"><span class="check-gold">✓</span>Trip Interruption: Up to $300/day</li>
             <li class="feature-reveal flex items-center text-gray-600"><span class="check-gold">✓</span>Higher coverage limits on all repairs</li>
           </ul>
 
           <button id="btn-ultimate"
-                  class="w-full bg-gold-500 text-white rounded-lg py-4 font-semibold hover:bg-gold-600 transition-all duration-300 transform hover:scale-105 active:scale-95">
+                  class="w-full bg-gradient-to-r from-gold-600 to-gold-500 text-white rounded-lg py-4 font-semibold hover:from-gold-700 hover:to-gold-600 transition-all duration-300 transform hover:scale-105 active:scale-95">
             Select Ultimate Coverage
           </button>
         </div>
@@ -371,7 +401,7 @@
     const cartContainer = document.getElementById('cart-container');
     let count = 0;
 
-    function selectPlan(selectedPlan) {
+    function selectPlan(selectedPlan, planName, price) {
       plans.forEach(plan => plan.classList.remove('selected'));
       selectedPlan.closest('.plan-card').classList.add('selected');
       
@@ -384,20 +414,34 @@
       setTimeout(() => {
         cartContainer.style.transform = 'scale(1)';
       }, 200);
+
+      // Track InitiateCheckout event
+      if (typeof fbq === 'function') {
+        fbq('track', 'InitiateCheckout', {
+          content_name: planName,
+          content_type: 'product',
+          contents: [{
+            id: planName.toLowerCase().replace(' ', '_'),
+            quantity: 1
+          }],
+          currency: 'USD',
+          value: price
+        });
+      }
     }
 
     basicBtn.addEventListener("click", (e) => {
-      selectPlan(e.target);
+      selectPlan(e.target, 'Essential Coverage', 980);
       setTimeout(() => window.location.href = BASIC_URL, 500);
     });
 
     advantageBtn.addEventListener("click", (e) => {
-      selectPlan(e.target);
+      selectPlan(e.target, 'Advantage Coverage', 1480);
       setTimeout(() => window.location.href = ADVANTAGE_URL, 500);
     });
 
     ultimateBtn.addEventListener("click", (e) => {
-      selectPlan(e.target);
+      selectPlan(e.target, 'Ultimate Coverage', 1980);
       setTimeout(() => window.location.href = ULTIMATE_URL, 500);
     });
 
