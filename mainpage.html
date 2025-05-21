@@ -2104,24 +2104,26 @@ const autoMakers = [
       });
     }
   });
-<script>
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    ["btn-basic","btn-advantage","btn-ultimate"].forEach(id => {
-      const btn = document.getElementById(id);
-      if (!btn) return;
-      btn.addEventListener("click", () => {
-        // 1. scroll up to the form
-        document
-          .getElementById("quote-form-section")
-          .scrollIntoView({ behavior: "smooth" });
-        // 2. show reminder popup
-        setTimeout(() => {
-          alert("Please fill out the information in the form above.");
-        }, 600);
+ <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      ["btn-basic","btn-advantage","btn-ultimate"].forEach(id => {
+        const btn = document.getElementById(id);
+        if (!btn) {
+          console.warn(`Button "${id}" not found`);
+          return;
+        }
+        btn.addEventListener("click", () => {
+          // 1) scroll up to the form
+          document
+            .getElementById("quote-form-section")
+            .scrollIntoView({ behavior: "smooth" });
+          // 2) remind user to fill it out
+          setTimeout(() => {
+            alert("Please fill out the information in the form above.");
+          }, 600);
+        });
       });
     });
-  });
-</script>
+  </script>
 </body>
 </html>
